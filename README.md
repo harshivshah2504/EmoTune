@@ -1,2 +1,2 @@
 # EmoTune
-Music player that works based on sentiments of the user
+Music player that plays songs based on sentiments of the user

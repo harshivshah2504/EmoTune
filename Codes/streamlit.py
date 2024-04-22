@@ -6,18 +6,76 @@ from PIL import Image
 from collections import Counter
 from play_song import play_random_song
 import random
+import pygame
+import os
 import threading
+import streamlit as st
+
 
 
 model = RMN()
 
+
+emotion_folders = {
+    "angry": "songs\calm",
+    "happy": "songs\happy",
+    "surprise": "songs\surprise",
+    "sad": "songs\sad",
+    "calm": "songs\calm",
+}
+
+# def play_random_song(emotion):
+#     if emotion in emotion_folders:
+#         folder_path = emotion_folders[emotion]
+#         # Get a list of all song files in the folder
+#         song_files = [file for file in os.listdir(folder_path) if file.endswith('.mp3')]
+#         if song_files:
+#             # Choose a random song from the folder
+#             song_name = random.choice(song_files)
+#             # Play the randomly selected song
+#             play_song(folder_path, song_name)
+#         else:
+#             print("No songs found for the specified emotion.")
+#     else:
+#         print("Emotion not supported.")
+
+
+# def play_song(folder_path, song_name):
+#     # Initialize pygame
+#     pygame.init()
+    
+#     # Get the full path of the song
+#     song_path = os.path.join(folder_path, song_name)
+    
+#     try:
+#         # Initialize the mixer module
+#         pygame.mixer.init()
+        
+#         # Load the song
+#         sound = pygame.mixer.Sound(song_path)
+        
+#         # Play the song
+#         sound.play()
+        
+#         # Wait until the song finishes playing
+#         while pygame.mixer.get_busy():
+#             pygame.time.Clock().tick(10)
+        
+#         # Quit pygame
+#         pygame.quit()
+        
+#     except pygame.error:
+#         print("Could not load or play the song.")
+
+
+        
 def process_image(image):
     image = np.array(image)
     emotion = model.detect_emotion_for_single_frame(image)
     return emotion
 
 def capture_face():
-    capture_duration = 5  # Capture images for 5 seconds
+    capture_duration = 1  # Capture images for 5 seconds
     cap = cv2.VideoCapture(0)  # Open the camera (0 for default camera)
 
     images = []
@@ -47,38 +105,51 @@ def capture_face():
     
     return most_common_emotion
 
-def play_and_monitor_emotion():
-    global is_playing, curr_emo, thread
+# def play_and_monitor_emotion():
+#     global is_playing, curr_emo, thread
 
-    curr_emo = capture_face()
-    play_random_song(curr_emo)
+#     curr_emo = capture_face()
+#     play_random_song(curr_emo)
 
-    # Wait for the song to finish playing
-    is_playing = True
-    while is_playing:
-        # Check if the thread is alive (song is still playing)
-        if not thread.is_alive():
-            is_playing = False
+#     # Wait for the song to finish playing
+#     is_playing = True
+#     while is_playing:
+#         # Check if the thread is alive (song is still playing)
+#         if not thread.is_alive():
+#             is_playing = False
 
 def main():
-    global is_playing, curr_emo, thread
-
     st.title("Face Capture and Model Output")
+    
+    curr_emo = None
+    
+    if st.button("Play"):
+        curr_emo = capture_face()
+        st.write("Your Current emotion is:", curr_emo)
+        
+        # Define path to your songs folder
+        songs_folder = "songs"
+        
+        # Check if the chosen emotion folder exists in the songs directory
+        if os.path.exists(os.path.join(songs_folder, curr_emo)):
+            # List all songs in the chosen emotion folder
+            songs = os.listdir(os.path.join(songs_folder, curr_emo))
+            
+            if songs:
+                # Select a random song from the emotion folder
+                random_song = random.choice(songs)
+                song_path = os.path.join(songs_folder, curr_emo, random_song)
+                
+                # Display the selected song
+                st.audio(song_path, format="audio/mpeg", loop=True)
+            else:
+                st.warning("No songs found for this emotion.")
+        else:
+            st.warning("Emotion folder not found.")
 
-    if not is_playing:
-        if st.button("Play"):
-            thread = threading.Thread(target=play_and_monitor_emotion)
-            thread.start()
 
-    if is_playing:
-        st.write(f"Current Emotion: {curr_emo}")
-        if st.button("Stop"):
-            is_playing = False
-            thread.join()  # Wait for the song thread to complete
-            st.success("Song Stopped!")
+
+
 
 if __name__ == "__main__":
-    is_playing = False
-    curr_emo = None
-    thread = None
     main()

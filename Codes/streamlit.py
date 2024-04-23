@@ -68,7 +68,7 @@ emotion_folders = {
 #         print("Could not load or play the song.")
 
 
-        
+
 def process_image(image):
     image = np.array(image)
     emotion = model.detect_emotion_for_single_frame(image)
@@ -89,7 +89,7 @@ def capture_face():
         # Convert the frame to RGB format
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         images.append(Image.fromarray(rgb_frame))
-        
+        #st.image(rgb_frame, channels="RGB", use_column_width=True, caption="Camera Capture")
         # Check if capture duration is reached
         elapsed_time = (cv2.getTickCount() - start_time) / cv2.getTickFrequency()
         if elapsed_time >= capture_duration:
@@ -119,14 +119,30 @@ def capture_face():
 #             is_playing = False
 
 def main():
-    st.title("Face Capture and Model Output")
-    
+    st.title("Emotion-Based Music Player")
+    st.markdown("Capture your emotion and enjoy music tailored to your mood.")
+    with open('style.css') as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+   
     curr_emo = None
     
     if st.button("Play"):
         curr_emo = capture_face()  # Assuming this function captures the current emotion
         st.write("Your Current emotion is:", curr_emo)
+        emotion_css_files = {
+        "happy": "happy.css",
+        "sad": "sad.css",
+        "calm":"calm.css",
+        "angry":"angry.css",
+        "surprise":"surprise.css"
         
+        # Add more emotions and corresponding CSS files as needed
+    }
+        if curr_emo in emotion_css_files:
+            css_file = emotion_css_files[curr_emo]
+            with open(css_file) as f:
+                st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)      
         # Define path to your songs folder based on current emotion
         songs_emo = emotion_folders.get(curr_emo)  # Get the path based on current emotion
         if songs_emo is not None:
@@ -140,3 +156,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

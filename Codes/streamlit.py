@@ -24,48 +24,17 @@ emotion_folders = {
     "calm": r"songs\calm",
 }
 
-# def play_random_song(emotion):
-#     if emotion in emotion_folders:
-#         folder_path = emotion_folders[emotion]
-#         # Get a list of all song files in the folder
-#         song_files = [file for file in os.listdir(folder_path) if file.endswith('.mp3')]
-#         if song_files:
-#             # Choose a random song from the folder
-#             song_name = random.choice(song_files)
-#             # Play the randomly selected song
-#             play_song(folder_path, song_name)
-#         else:
-#             print("No songs found for the specified emotion.")
-#     else:
-#         print("Emotion not supported.")
+emotion_css_files = {
+        "happy": "happy.css",
+        "sad": "sad.css",
+        "calm":"calm.css",
+        "angry":"angry.css",
+        "surprise":"surprise.css"
+        
+        # Add more emotions and corresponding CSS files as needed
+}
 
 
-# def play_song(folder_path, song_name):
-#     # Initialize pygame
-#     pygame.init()
-    
-#     # Get the full path of the song
-#     song_path = os.path.join(folder_path, song_name)
-    
-#     try:
-#         # Initialize the mixer module
-#         pygame.mixer.init()
-        
-#         # Load the song
-#         sound = pygame.mixer.Sound(song_path)
-        
-#         # Play the song
-#         sound.play()
-        
-#         # Wait until the song finishes playing
-#         while pygame.mixer.get_busy():
-#             pygame.time.Clock().tick(10)
-        
-#         # Quit pygame
-#         pygame.quit()
-        
-#     except pygame.error:
-#         print("Could not load or play the song.")
 
 
 
@@ -105,18 +74,7 @@ def capture_face():
     
     return most_common_emotion
 
-# def play_and_monitor_emotion():
-#     global is_playing, curr_emo, thread
 
-#     curr_emo = capture_face()
-#     play_random_song(curr_emo)
-
-#     # Wait for the song to finish playing
-#     is_playing = True
-#     while is_playing:
-#         # Check if the thread is alive (song is still playing)
-#         if not thread.is_alive():
-#             is_playing = False
 
 def main():
     st.title("Emotion-Based Music Player")
@@ -128,17 +86,10 @@ def main():
     curr_emo = None
     
     if st.button("Play"):
-        curr_emo = capture_face()  # Assuming this function captures the current emotion
+        with st.spinner("Detecting emotion..."):
+            curr_emo = capture_face()
+            
         st.write("Your Current emotion is:", curr_emo)
-        emotion_css_files = {
-        "happy": "happy.css",
-        "sad": "sad.css",
-        "calm":"calm.css",
-        "angry":"angry.css",
-        "surprise":"surprise.css"
-        
-        # Add more emotions and corresponding CSS files as needed
-    }
         if curr_emo in emotion_css_files:
             css_file = emotion_css_files[curr_emo]
             with open(css_file) as f:
@@ -149,7 +100,6 @@ def main():
             random_num = np.random.randint(1, 3)
             song_filename = f"{random_num}.mp3"  # Assuming your songs are named like "song1.mp3", "song2.mp3", etc.
             song_path = os.path.join(songs_emo, song_filename)  # Joining the folder path with the random song filename
-            print(song_path)  # For debugging purposes
             st.audio(song_path, format="audio/mp3", loop=True)
 
 

@@ -320,7 +320,7 @@ class RMN:
 
         results = []
         face_results = self.detect_faces(frame)
-
+        emo_label = "calm"
         for face in face_results:
             xmin = face["xmin"]
             ymin = face["ymin"]

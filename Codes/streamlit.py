@@ -17,11 +17,11 @@ model = RMN()
 
 
 emotion_folders = {
-    "angry": "songs\calm",
-    "happy": "songs\happy",
-    "surprise": "songs\surprise",
-    "sad": "songs\sad",
-    "calm": "songs\calm",
+    "angry": r"songs\calm",
+    "happy": r"songs\happy",
+    "surprise": r"songs\surprise",
+    "sad": r"songs\sad",
+    "calm": r"songs\calm",
 }
 
 # def play_random_song(emotion):
@@ -124,30 +124,17 @@ def main():
     curr_emo = None
     
     if st.button("Play"):
-        curr_emo = capture_face()
+        curr_emo = capture_face()  # Assuming this function captures the current emotion
         st.write("Your Current emotion is:", curr_emo)
         
-        # Define path to your songs folder
-        songs_folder = "songs"
-        
-        # Check if the chosen emotion folder exists in the songs directory
-        if os.path.exists(os.path.join(songs_folder, curr_emo)):
-            # List all songs in the chosen emotion folder
-            songs = os.listdir(os.path.join(songs_folder, curr_emo))
-            
-            if songs:
-                # Select a random song from the emotion folder
-                random_song = random.choice(songs)
-                song_path = os.path.join(songs_folder, curr_emo, random_song)
-                
-                # Display the selected song
-                st.audio(song_path, format="audio/mpeg", loop=True)
-            else:
-                st.warning("No songs found for this emotion.")
-        else:
-            st.warning("Emotion folder not found.")
-
-
+        # Define path to your songs folder based on current emotion
+        songs_emo = emotion_folders.get(curr_emo)  # Get the path based on current emotion
+        if songs_emo is not None:
+            random_num = np.random.randint(1, 3)
+            song_filename = f"{random_num}.mp3"  # Assuming your songs are named like "song1.mp3", "song2.mp3", etc.
+            song_path = os.path.join(songs_emo, song_filename)  # Joining the folder path with the random song filename
+            print(song_path)  # For debugging purposes
+            st.audio(song_path, format="audio/mp3", loop=True)
 
 
 

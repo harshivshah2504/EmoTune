@@ -77,8 +77,8 @@ def capture_face():
 
 
 def main():
-    st.title("Emotion-Based Music Player")
-    st.markdown("Capture your emotion and enjoy music tailored to your mood.")
+    st.title("EMOTUNE")
+    st.markdown("Tune Your Experience")
     with open('style.css') as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 

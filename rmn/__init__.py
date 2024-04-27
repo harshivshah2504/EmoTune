@@ -6,10 +6,10 @@ import cv2
 import numpy as np
 import torch
 from torchvision.transforms import transforms
-os.system("gdown --id 1R4SBd7pxPwjac5dkPNz0ksBzyVT6zU1H")
+
 from models import densenet121, resmasking_dropout1
 
-__version__ ='3.1.2'
+from .version import __version__
 
 
 def show(img, name="disp", width=1000):
@@ -122,7 +122,7 @@ def get_emo_model():
     emo_model = resmasking_dropout1(in_channels=3, num_classes=7)
     if is_cuda:
         emo_model.cuda(0)
-    state = torch.load("pretrained_ckpt", map_location="cpu")
+    state = torch.load(local_checkpoint_path, map_location="cpu")
     emo_model.load_state_dict(state["net"])
     emo_model.eval()
     return emo_model

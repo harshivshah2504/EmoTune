@@ -6,3 +6,4 @@ torch==2.2.2
 torchvision==0.17.2
 pytorchcv==0.0.67
 rmn==3.1.2
+gdown==5.1.0

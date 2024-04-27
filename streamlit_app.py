@@ -4,7 +4,6 @@ import numpy as np
 import cv2
 from PIL import Image
 from collections import Counter
-from play_song import play_random_song
 import random
 import pygame
 import os
@@ -30,8 +29,7 @@ emotion_css_files = {
         "calm":"calm.css",
         "angry":"angry.css",
         "surprise":"surprise.css"
-        
-        # Add more emotions and corresponding CSS files as needed
+
 }
 
 

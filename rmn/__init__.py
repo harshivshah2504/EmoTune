@@ -9,7 +9,7 @@ from torchvision.transforms import transforms
 
 from models import densenet121, resmasking_dropout1
 
-from .version import __version__
+__version__ ='3.1.2'
 
 
 def show(img, name="disp", width=1000):

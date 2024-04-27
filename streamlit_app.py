@@ -5,10 +5,9 @@ import cv2
 from PIL import Image
 from collections import Counter
 import random
-import pygame
 import os
 import threading
-import streamlit as st
+
 
 
 

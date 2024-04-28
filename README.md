@@ -28,7 +28,7 @@ The Emotion-Based Music Player EMO-TUNE is a unique application designed to enha
 
 ## Support
 
-If you encounter any issues or have suggestions for improvement, please feel free to reach out to our support team at b22cs042@iitj.ac.in. We're here to help!
+If you encounter any issues or have suggestions for improvement, please feel free to reach out to our support team at b22cs042@iitj.ac.in , b22cs098@iitj.ac.in . We're here to help!
 
 ## Contributing
 

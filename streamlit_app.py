@@ -74,8 +74,7 @@ def capture_face():
 
 
 def main():
-    st.title("EMOTUNE")
-    st.markdown("Tune Your Experience")
+    st.title("EMOTUNE-Tune Your Experience")
     with open('style.css') as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 

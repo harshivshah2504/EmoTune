@@ -10,7 +10,6 @@ import threading
 
 
 
-
 model = RMN()
 
 
@@ -67,6 +66,9 @@ def capture_face():
     for image in images:
         emotions.append(process_image(image))
     emotion_counts = Counter(emotions)
+    if(len(emotion_counts)==0):
+        return None
+    
     most_common_emotion = emotion_counts.most_common(1)[0][0]
     
     return most_common_emotion
@@ -84,19 +86,22 @@ def main():
     if st.button("Play"):
         with st.spinner("Detecting emotion..."):
             curr_emo = capture_face()
-            
-        st.write("Your Current emotion is:", curr_emo)
-        if curr_emo in emotion_css_files:
-            css_file = emotion_css_files[curr_emo]
-            with open(css_file) as f:
-                st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)      
-        # Define path to your songs folder based on current emotion
-        songs_emo = emotion_folders.get(curr_emo)  # Get the path based on current emotion
-        if songs_emo is not None:
-            random_num = np.random.randint(1, 3)
-            song_filename = f"{random_num}.mp3"  # Assuming your songs are named like "song1.mp3", "song2.mp3", etc.
-            song_path = os.path.join(songs_emo, song_filename)  # Joining the folder path with the random song filename
-            st.audio(song_path, format="audio/mp3", loop=True)
+        
+        if (curr_emo == None):
+            print("No Emotion Detected")
+        else:
+            st.write("Your Current emotion is:", curr_emo)
+            if curr_emo in emotion_css_files:
+                css_file = emotion_css_files[curr_emo]
+                with open(css_file) as f:
+                    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)      
+            # Define path to your songs folder based on current emotion
+            songs_emo = emotion_folders.get(curr_emo)  # Get the path based on current emotion
+            if songs_emo is not None:
+                random_num = np.random.randint(1, 3)
+                song_filename = f"{random_num}.mp3"  # Assuming your songs are named like "song1.mp3", "song2.mp3", etc.
+                song_path = os.path.join(songs_emo, song_filename)  # Joining the folder path with the random song filename
+                st.audio(song_path, format="audio/mp3", loop=True)
 
 
 
